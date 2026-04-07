@@ -1,1 +1,60 @@
 # wine-verify
+# wine-verify
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紅酒數位資產 RWA 驗證系統</title>
+    <style>
+        body { font-family: 'PingFang TC', sans-serif; background: #fdfcfb; color: #333; text-align: center; padding: 20px; }
+        .container { max-width: 450px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 20px; padding: 30px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .wine-tag { font-size: 12px; color: #800020; border: 1px solid #800020; padding: 2px 8px; border-radius: 10px; }
+        .status-box { margin: 20px 0; padding: 15px; border-radius: 10px; font-weight: bold; }
+        .pending { background: #fff4e5; color: #b7791f; }
+        .verified { background: #f0fff4; color: #2f855a; }
+        .btn { background: #800020; color: white; border: none; padding: 12px 20px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="wine-tag">RWA Asset Tokenization</span>
+        <h2>🍷 紅酒資產驗證</h2>
+        <hr>
+        <p>Token ID: <strong id="tid">載入中...</strong></p>
+        <p>實體標籤 UID: <code id="uid">讀取中...</code></p>
+        
+        <div id="statusArea" class="status-box pending">
+            狀態：[實驗模擬] 等待掃描驗證
+        </div>
+
+        <p style="text-align: left; font-size: 14px; color: #666;">
+            <strong>代幣化說明：</strong><br>
+            此頁面模擬 RWA 預言機行為。掃描 NFC 後，系統會抓取標籤特徵值並回傳至智慧合約進行資產狀態對比。
+        </p>
+
+        <button class="btn" onclick="simulateVerify()">執行鏈上驗證 (Simulate)</button>
+        <p id="msg" style="font-size: 12px; margin-top: 10px;"></p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('tid').innerText = urlParams.get('id') || '0';
+        document.getElementById('uid').innerText = 'NTAG213-' + Math.random().toString(16).slice(2, 10).toUpperCase();
+
+        function simulateVerify() {
+            const btn = document.querySelector('.btn');
+            const status = document.getElementById('statusArea');
+            btn.disabled = true;
+            document.getElementById('msg').innerText = "正在向 Remix VM 合約發送驗證請求...";
+            
+            setTimeout(() => {
+                status.className = "status-box verified";
+                status.innerText = "✅ 驗證成功：資產未被替換";
+                document.getElementById('msg').innerText = "區塊鏈狀態已同步更新 (isRedeemed = true)";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
